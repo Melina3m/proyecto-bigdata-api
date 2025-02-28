@@ -1,14 +1,25 @@
-#Comienzo del codigo de ingestion.py
 import requests
 import pandas as pd
 import time
 import sqlite3
 import json
+from dotenv import load_dotenv
+import os
 
-# Configuración: reemplaza por tu token de autenticación
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
+
+# Obtener el token de la variable de entorno
+api_token = os.getenv("TMDB_API_TOKEN")
+
+if not api_token:
+    print("Error: No se encontró el token de la API. Verifica el archivo .env")
+    exit()
+
+# Configuración: utiliza el token de autenticación cargado desde .env
 headers = {
     "accept": "application/json",
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNzIwOWU3MjJlOWY5ZjhjODJiZmFlODEwNjIzNGMyMCIsIm5iZiI6MTczMjAzMDUzNS45NjgsInN1YiI6IjY3M2NiMDQ3MDhlOGZkODUxOGM5NTc5OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ppIu0biYaIKJzTW6qaIbDg8XkGpssP1W9qoXsLTR4Lc"
+    "Authorization": f"Bearer {api_token}"
 }
 
 base_url = "https://api.themoviedb.org/3/discover/movie"
@@ -33,7 +44,7 @@ data = response.json()
 total_pages = data.get("total_pages", 1)
 print(f"Total de páginas disponibles: {total_pages}")
 
-# limitar el número de páginas a procesar si total_pages es mayor a 500
+# Limitar el número de páginas a procesar si total_pages es mayor a 500
 max_pages = min(total_pages, 1)
 
 # Procesamos la primera página
@@ -79,13 +90,12 @@ excel_file = "tmdb_movies.xlsx"
 df.to_excel(excel_file, index=False)
 print(f"Datos guardados en {excel_file}")
 
-
 # Convertir a string cualquier columna que tenga listas o diccionarios
 for col in df.columns:
     if df[col].apply(lambda x: isinstance(x, list) or isinstance(x, dict)).any():
         df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (list, dict)) else x)
-        
-# Conectar a la base de datos SQLite ubicada en src/db/ingestion.db
+
+# Conectar a la base de datos SQLite ubicada en src/static/db/ingestion.db
 conn = sqlite3.connect('src/static/db/ingestion.db')
 
 # Guardar el DataFrame en una tabla llamada 'movies'
