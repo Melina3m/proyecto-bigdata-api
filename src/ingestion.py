@@ -150,7 +150,7 @@ for page in range(2, max_pages + 1):
 df = pd.DataFrame(results_all)
 
 # Exportar el DataFrame al archivo Excel existente
-excel_file = "tmdb_movies.xlsx"
+excel_file = "src/static/xlsx/tmdb_movies.xlsx"
 df.to_excel(excel_file, index=False)
 print(f"Datos guardados en {excel_file}")
 
@@ -194,7 +194,7 @@ except Exception as e:
 
 # Generar el informe de auditoría para SQLite (si se cargaron datos)
 if not df_sqlite.empty:
-    generar_reporte(df_sqlite, "Reporte de Auditoría - SQLite", "sqlite_audit_report.html")
+    generar_reporte(df_sqlite, "Reporte de Auditoría - SQLite", "src/static/auditoria/sqlite_audit_report.html")
 else:
     print("No se generó reporte para SQLite, el DataFrame está vacío.")
 
@@ -202,7 +202,7 @@ else:
 # Auditoría del archivo Excel
 # -----------------------------
 try:
-    df_excel = pd.read_excel("tmdb_movies.xlsx")
+    df_excel = pd.read_excel("src/static/xlsx/tmdb_movies.xlsx")
     print("Datos cargados correctamente desde el archivo Excel.")
 except Exception as e:
     print(f"Error al cargar datos desde Excel: {e}")
@@ -210,7 +210,7 @@ except Exception as e:
 
 # Generar el informe de auditoría para Excel (si se cargaron datos)
 if not df_excel.empty:
-    generar_reporte(df_excel, "Reporte de Auditoría - Excel", "excel_audit_report.html")
+    generar_reporte(df_excel, "Reporte de Auditoría - Excel", "src/static/auditoria/excel_audit_report.html")
 else:
     print("No se generó reporte para Excel, el DataFrame está vacío.")
     
@@ -282,7 +282,7 @@ for key in key_fields:
     report_lines.append("")
 
 # Guardar el reporte comparativo en un archivo de texto
-report_file = "comparative_audit_report.txt"
+report_file = "src/static/auditoria/comparative_audit_report.txt"
 with open(report_file, "w", encoding="utf-8") as f:
     for line in report_lines:
         f.write(line + "\n")
