@@ -1,3 +1,6 @@
+import numba
+if not hasattr(numba, 'generated_jit'):
+    numba.generated_jit = numba.jit
 import requests
 import pandas as pd
 import time
@@ -5,6 +8,7 @@ import sqlite3
 import json
 from dotenv import load_dotenv
 import os
+from ydata_profiling import ProfileReport
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
@@ -37,6 +41,10 @@ params = {
     "sort_by": "revenue.desc"
 }
 
+paramsDetails = {
+    "language": "es-MX"
+}
+
 # Hacemos una primera solicitud para conocer el total de páginas disponibles
 response = requests.get(base_url_discover, headers=headers, params=params)
 if response.status_code != 200:
@@ -48,7 +56,7 @@ total_pages = data.get("total_pages", 1)
 print(f"Total de páginas disponibles: {total_pages}")
 
 # Limitar el número de páginas a procesar si total_pages es mayor a 500
-max_pages = min(total_pages, 1)
+max_pages = min(total_pages, 5)
 
 # Procesamos la primera página
 for record in data.get("results", []):
@@ -56,7 +64,7 @@ for record in data.get("results", []):
 
     # Solicitar detalles adicionales de la película
     details_url = f"{base_url_details}/{movie_id}"
-    details_response = requests.get(details_url, headers=headers)
+    details_response = requests.get(details_url, headers=headers, params=paramsDetails)
 
     if details_response.status_code == 200:
         movie_details = details_response.json()
@@ -163,3 +171,121 @@ if not df.empty:
     conn.close()
 
     print("Datos guardados en la base de datos SQLite 'src/static/db/ingestion.db' en la tabla 'movies'.")
+
+
+# Función para generar el reporte a partir de un DataFrame
+def generar_reporte(df, titulo, nombre_archivo):
+    reporte = ProfileReport(df, title=titulo, explorative=True)
+    reporte.to_file(nombre_archivo)
+    print(f"Reporte guardado en: {nombre_archivo}")
+
+# -----------------------------
+# Auditoría de la base de datos SQLite
+# -----------------------------
+# Conectar a la base de datos y leer la tabla 'movies'
+try:
+    conn = sqlite3.connect('src/static/db/ingestion.db')
+    df_sqlite = pd.read_sql("SELECT * FROM movies", conn)
+    conn.close()
+    print("Datos cargados correctamente desde SQLite.")
+except Exception as e:
+    print(f"Error al cargar datos desde SQLite: {e}")
+    df_sqlite = pd.DataFrame()  # DataFrame vacío en caso de error
+
+# Generar el informe de auditoría para SQLite (si se cargaron datos)
+if not df_sqlite.empty:
+    generar_reporte(df_sqlite, "Reporte de Auditoría - SQLite", "sqlite_audit_report.html")
+else:
+    print("No se generó reporte para SQLite, el DataFrame está vacío.")
+
+# -----------------------------
+# Auditoría del archivo Excel
+# -----------------------------
+try:
+    df_excel = pd.read_excel("tmdb_movies.xlsx")
+    print("Datos cargados correctamente desde el archivo Excel.")
+except Exception as e:
+    print(f"Error al cargar datos desde Excel: {e}")
+    df_excel = pd.DataFrame()  # DataFrame vacío en caso de error
+
+# Generar el informe de auditoría para Excel (si se cargaron datos)
+if not df_excel.empty:
+    generar_reporte(df_excel, "Reporte de Auditoría - Excel", "excel_audit_report.html")
+else:
+    print("No se generó reporte para Excel, el DataFrame está vacío.")
+    
+    
+# -----------------------------
+# Comparativa de auditoría entre las fuentes de datos
+# -----------------------------
+
+report_lines = []
+report_lines.append("Comparative Audit Report")
+report_lines.append("========================")
+report_lines.append("")
+
+# Número de registros en cada fuente
+n_api = len(df)
+n_sqlite = len(df_sqlite)
+n_excel = len(df_excel)
+
+report_lines.append(f"Total de registros extraídos de la API: {n_api}")
+report_lines.append(f"Total de registros en la base de datos SQLite: {n_sqlite}")
+report_lines.append(f"Total de registros en el archivo Excel: {n_excel}")
+report_lines.append("")
+
+# Comparación de conteo de registros
+if n_api == n_sqlite == n_excel:
+    report_lines.append("Los conteos de registros son consistentes en todas las fuentes.")
+else:
+    report_lines.append("¡Atención! Los conteos de registros difieren entre las fuentes.")
+report_lines.append("")
+
+# Comparación de columnas
+cols_api = set(df.columns)
+cols_sqlite = set(df_sqlite.columns)
+cols_excel = set(df_excel.columns)
+
+report_lines.append("Columnas presentes en cada fuente:")
+report_lines.append(f"- API: {', '.join(sorted(cols_api))}")
+report_lines.append(f"- SQLite: {', '.join(sorted(cols_sqlite))}")
+report_lines.append(f"- Excel: {', '.join(sorted(cols_excel))}")
+report_lines.append("")
+
+# Verificar diferencias en las columnas (campos clave)
+diff_sqlite_api = cols_api.symmetric_difference(cols_sqlite)
+diff_excel_api = cols_api.symmetric_difference(cols_excel)
+
+if diff_sqlite_api:
+    report_lines.append("Diferencias entre columnas de API y SQLite:")
+    report_lines.append(f"  {', '.join(sorted(diff_sqlite_api))}")
+else:
+    report_lines.append("No se encontraron diferencias en las columnas entre API y SQLite.")
+
+if diff_excel_api:
+    report_lines.append("Diferencias entre columnas de API y Excel:")
+    report_lines.append(f"  {', '.join(sorted(diff_excel_api))}")
+else:
+    report_lines.append("No se encontraron diferencias en las columnas entre API y Excel.")
+report_lines.append("")
+
+# Verificación de integridad para campos clave (por ejemplo, 'id' y 'original_title')
+key_fields = ['id', 'original_title']
+for key in key_fields:
+    report_lines.append(f"Verificación de integridad para el campo '{key}':")
+    missing_api = df[key].isnull().sum() if key in df.columns else "Columna no encontrada"
+    missing_sqlite = df_sqlite[key].isnull().sum() if key in df_sqlite.columns else "Columna no encontrada"
+    missing_excel = df_excel[key].isnull().sum() if key in df_excel.columns else "Columna no encontrada"
+    report_lines.append(f"  - Registros faltantes en API: {missing_api}")
+    report_lines.append(f"  - Registros faltantes en SQLite: {missing_sqlite}")
+    report_lines.append(f"  - Registros faltantes en Excel: {missing_excel}")
+    report_lines.append("")
+
+# Guardar el reporte comparativo en un archivo de texto
+report_file = "comparative_audit_report.txt"
+with open(report_file, "w", encoding="utf-8") as f:
+    for line in report_lines:
+        f.write(line + "\n")
+
+print(f"Reporte comparativo generado en: {report_file}")
+
