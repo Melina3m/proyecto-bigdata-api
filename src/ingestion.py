@@ -74,8 +74,10 @@ for record in data.get("results", []):
         record["revenue"] = movie_details.get("revenue")
         record["runtime"] = movie_details.get("runtime")
         record["genres"] = [genre['name'] for genre in movie_details.get("genres", [])]
+        record["origin_country"] = movie_details.get("origin_country", [])
         record["production_companies"] = [company['name'] for company in movie_details.get("production_companies", [])]
-        record["spoken_languages"] = [lang['name'] for lang in movie_details.get("spoken_languages", [])]
+        record["production_countries"] = [country["name"] for country in movie_details.get("production_countries", [])]
+        record["spoken_languages"] = [lang["name"] for lang in movie_details.get("spoken_languages", [])]
         record["homepage"] = movie_details.get("homepage")
         record["tagline"] = movie_details.get("tagline")
         record["vote_average"] = movie_details.get("vote_average")
@@ -124,8 +126,10 @@ for page in range(2, max_pages + 1):
                 record["revenue"] = movie_details.get("revenue")
                 record["runtime"] = movie_details.get("runtime")
                 record["genres"] = [genre['name'] for genre in movie_details.get("genres", [])]
+                record["origin_country"] = movie_details.get("origin_country", [])
                 record["production_companies"] = [company['name'] for company in movie_details.get("production_companies", [])]
-                record["spoken_languages"] = [lang['name'] for lang in movie_details.get("spoken_languages", [])]
+                record["production_countries"] = [country["name"] for country in movie_details.get("production_countries", [])]
+                record["spoken_languages"] = [lang["name"] for lang in movie_details.get("spoken_languages", [])]
                 record["homepage"] = movie_details.get("homepage")
                 record["tagline"] = movie_details.get("tagline")
                 record["vote_average"] = movie_details.get("vote_average")
