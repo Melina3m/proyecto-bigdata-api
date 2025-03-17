@@ -9,6 +9,10 @@ on:
     branches:
       - main
 
+# Añadir esta sección de permisos
+permissions:
+  contents: write
+
 # Configura el ambiente y los jobs
 jobs:
   build:
