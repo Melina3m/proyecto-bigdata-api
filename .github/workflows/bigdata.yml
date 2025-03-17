@@ -54,7 +54,7 @@ jobs:
         git add src/static/auditoria/excel_audit_report.html
         git add src/static/auditoria/sqlite_audit_report.html
         git add src/static/auditoria/cleaning_report.txt
-        git add src/db/ingestion.db
+        git add src/static/db/ingestion.db
         git add src/static/xlsx/tmdb_movies.xlsx
         git add src/static/xlsx/cleaned_data.xlsx
         git commit -m "Actualizar archivos de ingestion y limpieza, además de auditorías [skip ci]" || echo "No changes to commit"
