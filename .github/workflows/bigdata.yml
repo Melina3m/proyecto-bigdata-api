@@ -37,3 +37,10 @@ jobs:
         python src/ingestion.py
       env:
         TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+
+    # Corre el script de cleaning.py
+    - name: Run Cleaning script
+      run: |
+        python src/cleaning.py
+      env:
+        TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
