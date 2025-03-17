@@ -52,7 +52,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add src/static/auditoria/comparative_audit_report.txt
         git add src/static/auditoria/excel_audit_report.html
-        git add src/static/auditoria/sql_audit_report.html
+        git add src/static/auditoria/sqlite_audit_report.html
         git add src/static/auditoria/cleaning_report.txt
         git add src/db/ingestion.db
         git add src/static/xlsx/tmdb_movies.xlsx
