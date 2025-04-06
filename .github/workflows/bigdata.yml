@@ -41,6 +41,7 @@ jobs:
         python src/ingestion.py
       env:
         TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+        OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
 
     # Corre el script de cleaning.py
     - name: Run Cleaning script
@@ -48,6 +49,15 @@ jobs:
         python src/cleaning.py
       env:
         TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+        OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
+
+    # Corre el script de enrichment.py
+    - name: Run Enrichment script
+      run: |
+        python src/enrichement.py
+      env:
+        TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+        OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
 
     # Commit y push de los archivos generados
     - name: Commit and push generated files
@@ -58,8 +68,22 @@ jobs:
         git add src/static/auditoria/excel_audit_report.html
         git add src/static/auditoria/sqlite_audit_report.html
         git add src/static/auditoria/cleaning_report.txt
+        git add src/static/auditoria/enrichment_report.txt
         git add src/static/db/ingestion.db
         git add src/static/xlsx/tmdb_movies.xlsx
         git add src/static/xlsx/cleaned_data.xlsx
-        git commit -m "Actualizar archivos de ingestion y limpieza, además de auditorías [skip ci]" || echo "No changes to commit"
+        git add src/static/xlsx/enriched_data.xlsx
+        git commit -m "Actualizar archivos de ingestion, limpieza y enriquecimiento, además de auditorías [skip ci]" || echo "No changes to commit"
         git push
+
+    # Instala MkDocs y el plugin de Material
+    - name: Deploy MkDocs
+      run: |
+        mkdocs gh-deploy --force
+
+    # Genera la documentación
+    - name: Copy audit files to docs
+      run: |
+        mkdir -p docs/auditoria/archivos
+        cp src/static/auditoria/*.html docs/auditoria/archivos/
+        cp src/static/auditoria/*.txt docs/auditoria/archivos/
