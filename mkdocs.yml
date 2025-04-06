@@ -11,9 +11,6 @@ plugins:
             - import sys
             - sys.path.append("src")
 
-extra_static_paths:
-  - src/static/auditoria/
-
 theme:
   name: material
   palette:

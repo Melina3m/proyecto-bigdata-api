@@ -76,6 +76,13 @@ jobs:
         git commit -m "Actualizar archivos de ingestion, limpieza y enriquecimiento, además de auditorías [skip ci]" || echo "No changes to commit"
         git push
 
+    # Genera la documentación
+    - name: Copy audit files to docs
+      run: |
+        mkdir -p docs/auditoria/archivos
+        cp src/static/auditoria/*.html docs/auditoria/archivos/
+        cp src/static/auditoria/*.txt docs/auditoria/archivos/
+        
     # Build mkdocs
     - name: Build MkDocs
       run: |
@@ -85,9 +92,3 @@ jobs:
       run: |
         mkdocs gh-deploy --force
 
-    # Genera la documentación
-    - name: Copy audit files to docs
-      run: |
-        mkdir -p docs/auditoria/archivos
-        cp src/static/auditoria/*.html docs/auditoria/archivos/
-        cp src/static/auditoria/*.txt docs/auditoria/archivos/
