@@ -11,14 +11,14 @@ Watch Providers (Colombia) Enrichment:
 - Registros con 'watch_link_co': 83
 
 OMDb Enrichment:
-- Registros con 'imdbVotes' no nulo: 0
+- Registros con 'imdbVotes' no nulo: 98
 
 Columnas presentes:
 - Dataset base: adult, budget, genres, id, origin_country, original_language, original_title, popularity, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, tagline, title, video, vote_average, vote_count
-- Dataset enriquecido: adult, belongs_to_collection, budget, genres, id, imdb_id, origin_country, original_language, original_title, popularity, production_companies, production_countries, provider_type_co, providers_co, release_date, revenue, runtime, spoken_languages, status, tagline, title, video, vote_average, vote_count, watch_link_co
+- Dataset enriquecido: Awards_omdb, Director_omdb, adult, belongs_to_collection, budget, genres, id, imdbRating, imdbVotes, imdb_id, origin_country, original_language, original_title, popularity, production_companies, production_countries, provider_type_co, providers_co, release_date, revenue, runtime, spoken_languages, status, tagline, title, video, vote_average, vote_count, watch_link_co
 
 Diferencias entre columnas (symmetric difference):
-  belongs_to_collection, imdb_id, provider_type_co, providers_co, status, watch_link_co
+  Awards_omdb, Director_omdb, belongs_to_collection, imdbRating, imdbVotes, imdb_id, provider_type_co, providers_co, status, watch_link_co
 
 Verificación de integridad (campos clave):
   Campo 'id': Base = 0, Enriquecido = 0
