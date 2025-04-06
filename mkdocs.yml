@@ -1,0 +1,52 @@
+site_name: Proyecto Big Data TMDB
+site_description: Documentación del proceso ETL para datos de películas de TMDB
+site_author: Tu Nombre
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          setup_commands:
+            - import sys
+            - sys.path.append("src")
+
+extra_static_paths:
+  - src/static/auditoria/
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Inicio: index.md
+  - Arquitectura: 
+    - Visión general: arquitectura/overview.md
+    - Estructura del proyecto: arquitectura/estructura.md
+    - Flujo de trabajo: arquitectura/workflow.md
+  - Procesos:
+    - Ingesta de datos: procesos/ingestion.md
+    - Limpieza de datos: procesos/cleaning.md
+    - Enriquecimiento de datos: procesos/enrichement.md
+  - Auditoría: 
+    - Reportes de calidad: auditoria/reportes.md
+    - Métricas: auditoria/metricas.md
+  - Referencia API:
+    - Módulo ingestion: api/ingestion.md
+    - Módulo cleaning: api/cleaning.md
+    - Módulo enrichment: api/enrichement.md

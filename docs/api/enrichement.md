@@ -1,0 +1,2 @@
+::: src.enrichement
+    handler: python
