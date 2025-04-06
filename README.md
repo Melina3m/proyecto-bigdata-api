@@ -60,6 +60,63 @@ El proceso documenta métricas importantes como:
 - Total de valores nulos antes y después del proceso
 - Cantidad de filas duplicadas detectadas y eliminadas
 
+## Enriquecimiento de Datos
+
+Tras la limpieza y la normalización, se lleva a cabo un proceso de enriquecimiento que integra información adicional desde **TMDB** (detalles y proveedores de visualización) y **OMDb** (información de IMDb).
+
+Este enriquecimiento se realiza a través de varias funciones:
+
+### `enrich_tmdb_details(db_path, headers, params_details, delay=0.15)`
+
+- Consulta el endpoint de detalles de TMDB:  
+  `https://api.themoviedb.org/3/movie/{movie_id}`  
+  para cada película y agrega campos como:
+  - **status** (Status de la película según TMDB).
+  - **belongs_to_collection** (Colección a la que pertenece).
+  - **imdb_id** (ID de IMDb para posteriores consultas en OMDb).
+- Los datos se guardan en la tabla `movies_enriched` de la base de datos.
+
+### `enrich_watch_providers(db_path, headers, delay=0.15)`
+
+- Consulta los proveedores de visualización en TMDB:  
+  `https://api.themoviedb.org/3/movie/{movie_id}/watch/providers`  
+  para cada película.
+- Agrega información específica para **Colombia** (código "CO"):
+  - **watch_link_co**: Enlace general para ver la película en CO.
+  - **provider_type_co**: Lista de tipos de servicio disponibles (flatrate, buy, rent).
+  - **providers_co**: Información de los proveedores (filtrando datos innecesarios como `logo_path`, `provider_id`, etc.).
+- Los datos se actualizan en la misma tabla `movies_enriched`.
+
+### `enrich_omdb_details(db_path, omdb_api_key, delay=0.15)`
+
+- Utiliza el `imdb_id` previamente obtenido para consultar la API de **OMDb**:  
+  `https://www.omdbapi.com/`
+- Para cada película que tenga un `imdb_id` válido, se añaden:
+  - **imdbVotes**
+  - **imdbRating**
+  - **Director_omdb**
+  - **Awards_omdb**
+- Se requiere una clave de API específica de OMDb (`OMDB_API_KEY`).
+- La tabla `movies_enriched` se actualiza con estos campos.
+
+---
+
+## Exportación de datos enriquecidos y reporte de auditoría final
+
+Después de las operaciones de enriquecimiento, se generan dos salidas principales:
+
+1. **Exportación del dataset enriquecido**  
+   La función `export_enriched_dataset(db_path, excel_file)` exporta el contenido de la tabla `movies_enriched` a un archivo Excel (**`enriched_data.xlsx`**).  
+   Este archivo se genera en la carpeta `src/static/xlsx/`.
+
+2. **Generación de reporte de auditoría**  
+   La función `generate_audit_report(db_path, report_file)` crea un reporte comparativo en texto, **`enrichment_report.txt`**, que incluye:
+   - Comparación del número de registros entre la tabla base `movies_cleaned` y la tabla `movies_enriched`.
+   - Validación de la cantidad de registros enriquecidos con datos de TMDB (`status`), Watch Providers (`watch_link_co`) y OMDb (`imdbVotes`).
+   - Revisión de columnas y diferencias entre ambas tablas.
+
+Este archivo de reporte se genera en la carpeta `src/static/auditoria/`.
+
 ## Instrucciones para ejecutar el proyecto
 
 ### 1. Requisitos previos
