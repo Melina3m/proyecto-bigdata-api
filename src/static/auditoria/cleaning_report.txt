@@ -1,8 +1,9 @@
+
 REPORTE DE LIMPIEZA DE DATOS
 ============================
 - Número de registros antes de la limpieza: 100
 - Número de registros después de la limpieza: 100
-- Número de columnas antes de la limpieza: 24 
+- Número de columnas antes de la limpieza: 24
 - Número de columnas después de la limpieza: 19
 - Número total de valores nulos antes de la limpieza: 1
 - Número total de valores nulos después de la limpieza: 0
@@ -20,6 +21,6 @@ OPERACIONES REALIZADAS:
 - Traducción de géneros en la columna 'genres' a español.
 - Traducción de países en la columna 'production_countries' a español.
 - Traducción de códigos de país en 'origin_country' a español.
-- Reemplazo de 'tagline' vacío o sólo con comillas por 'N/A'.
+- Reemplazo de 'tagline' vacío o solo con espacios por 'N/A'.
 - Creación de la tabla 'movies_cleaned' en la base de datos SQLite.
 - Exportación del DataFrame limpio a 'cleaned_data.xlsx'.
