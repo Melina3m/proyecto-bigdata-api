@@ -76,6 +76,10 @@ jobs:
         git commit -m "Actualizar archivos de ingestion, limpieza y enriquecimiento, además de auditorías [skip ci]" || echo "No changes to commit"
         git push
 
+    # Build mkdocs
+    - name: Build MkDocs
+      run: |
+        mkdocs build
     # Instala MkDocs y el plugin de Material
     - name: Deploy MkDocs
       run: |
