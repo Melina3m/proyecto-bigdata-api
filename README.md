@@ -1,5 +1,9 @@
 # Proyecto Big Data - TMDB API
 
+# 📚 [Documentación Completa del Proyecto](https://melina3m.github.io/proyecto-bigdata-api/)
+
+> **¡Visita nuestra documentación interactiva generada con MkDocs para obtener información detallada del proyecto, diagramas y referencia técnica!**
+
 ## Descripción
 
 Este proyecto consiste en la extracción, almacenamiento y análisis de datos de películas utilizando la API de **The Movie Database (TMDB)**. El objetivo principal es obtener información sobre las películas lanzadas entre 2020 y 2024, almacenarla en una base de datos **SQLite** y realizar una auditoría comparativa de los datos obtenidos de diferentes fuentes (API, SQLite y Excel).
