@@ -1,0 +1,26 @@
+
+REPORTE DE LIMPIEZA DE DATOS
+============================
+- Número de registros antes de la limpieza: 100
+- Número de registros después de la limpieza: 100
+- Número de columnas antes de la limpieza: 24
+- Número de columnas después de la limpieza: 19
+- Número total de valores nulos antes de la limpieza: 1
+- Número total de valores nulos después de la limpieza: 0
+- Número total de filas duplicadas: 0
+
+OPERACIONES REALIZADAS:
+- Eliminación de filas duplicadas.
+- Conversión de columnas de listas a cadenas de texto: genres, production_companies, spoken_languages, production_countries, origin_country.
+- Eliminación de columnas: overview, genre_ids, poster_path, homepage, backdrop_path.
+- Relleno de valores nulos en 'production_companies' y 'production_countries' con 'No aplica'.
+- Relleno de valores nulos en columnas de texto con 'N/A'.
+- Conversión de 'release_date' a formato datetime (con errores a NaT).
+- Relleno de 'runtime' con 0 para valores faltantes.
+- Traducción de códigos de idioma en 'original_language' a nombres en español.
+- Traducción de géneros en la columna 'genres' a español.
+- Traducción de países en la columna 'production_countries' a español.
+- Traducción de códigos de país en 'origin_country' a español.
+- Reemplazo de 'tagline' vacío o solo con espacios por 'N/A'.
+- Creación de la tabla 'movies_cleaned' en la base de datos SQLite.
+- Exportación del DataFrame limpio a 'cleaned_data.xlsx'.

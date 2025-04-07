@@ -1,0 +1,27 @@
+Comparative Audit Report
+========================
+
+Total de registros extraídos de la API: 100
+Total de registros en la base de datos SQLite: 100
+Total de registros en el archivo Excel: 100
+
+Los conteos de registros son consistentes en todas las fuentes.
+
+Columnas presentes en cada fuente:
+- API: adult, backdrop_path, budget, genre_ids, genres, homepage, id, origin_country, original_language, original_title, overview, popularity, poster_path, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, tagline, title, video, vote_average, vote_count
+- SQLite: adult, backdrop_path, budget, genre_ids, genres, homepage, id, origin_country, original_language, original_title, overview, popularity, poster_path, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, tagline, title, video, vote_average, vote_count
+- Excel: adult, backdrop_path, budget, genre_ids, genres, homepage, id, origin_country, original_language, original_title, overview, popularity, poster_path, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, tagline, title, video, vote_average, vote_count
+
+No se encontraron diferencias en las columnas entre API y SQLite.
+No se encontraron diferencias en las columnas entre API y Excel.
+
+Verificación de integridad para el campo 'id':
+  - Registros faltantes en API: 0
+  - Registros faltantes en SQLite: 0
+  - Registros faltantes en Excel: 0
+
+Verificación de integridad para el campo 'original_title':
+  - Registros faltantes en API: 0
+  - Registros faltantes en SQLite: 0
+  - Registros faltantes en Excel: 0
+

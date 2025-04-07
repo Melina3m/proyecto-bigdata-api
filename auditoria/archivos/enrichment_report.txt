@@ -1,0 +1,31 @@
+ENRICHMENT REPORT
+===========================
+
+Dataset base (movies_cleaned) count: 100
+Dataset final (movies_enriched) count: 100
+
+TMDB Details Enrichment:
+- Registros con 'status': 100
+
+Watch Providers (Colombia) Enrichment:
+- Registros con 'watch_link_co': 83
+
+OMDb Enrichment:
+- Registros con 'imdbVotes' no nulo: 98
+
+Columnas presentes:
+- Dataset base: adult, budget, genres, id, origin_country, original_language, original_title, popularity, production_companies, production_countries, release_date, revenue, runtime, spoken_languages, tagline, title, video, vote_average, vote_count
+- Dataset enriquecido: Awards_omdb, Director_omdb, adult, belongs_to_collection, budget, genres, id, imdbRating, imdbVotes, imdb_id, origin_country, original_language, original_title, popularity, production_companies, production_countries, provider_type_co, providers_co, release_date, revenue, runtime, spoken_languages, status, tagline, title, video, vote_average, vote_count, watch_link_co
+
+Diferencias entre columnas (symmetric difference):
+  Awards_omdb, Director_omdb, belongs_to_collection, imdbRating, imdbVotes, imdb_id, provider_type_co, providers_co, status, watch_link_co
+
+Verificación de integridad (campos clave):
+  Campo 'id': Base = 0, Enriquecido = 0
+  Campo 'original_title': Base = 0, Enriquecido = 0
+
+Observaciones:
+- Se realizó el cruce de datos de TMDB para incorporar detalles (status, belongs_to_collection, imdb_id).
+- Se integró la información de Watch Providers para Colombia (combinando flatrate, buy y rent).
+- La integración con OMDb se efectuó para registros con un imdb_id válido, añadiendo imdbVotes, imdbRating, Director y Awards.
+- La combinación de estas fuentes enriquece el dataset con metadatos, datos de streaming y calificaciones externas.
