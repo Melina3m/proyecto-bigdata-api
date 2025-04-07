@@ -24,7 +24,11 @@ theme:
 
 markdown_extensions:
   - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - admonition
   - tables
   - toc:
@@ -33,8 +37,8 @@ markdown_extensions:
 nav:
   - Inicio: index.md
   - Arquitectura: 
-    - Visión general: arquitectura/overview.md
     - Estructura del proyecto: arquitectura/estructura.md
+    - Estructura de tablas: arquitectura/diagramas.md
     - Flujo de trabajo: arquitectura/workflow.md
   - Procesos:
     - Ingesta de datos: procesos/ingestion.md
@@ -42,7 +46,6 @@ nav:
     - Enriquecimiento de datos: procesos/enrichement.md
   - Auditoría: 
     - Reportes de calidad: auditoria/reportes.md
-    - Métricas: auditoria/metricas.md
   - Referencia API:
     - Módulo ingestion: api/ingestion.md
     - Módulo cleaning: api/cleaning.md
