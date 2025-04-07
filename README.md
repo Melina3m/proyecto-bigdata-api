@@ -129,10 +129,12 @@ Este archivo de reporte se genera en la carpeta `src/static/auditoria/`.
 ### 2. Configuración
 - ** Crea un archivo .env en la raíz del proyecto con tu token de la API de TMDB:
     TMDB_API_TOKEN=tu_token
+    OMDB_API_KEY=tu_clave
 
 ### 3. Ejecución
 - ** Para ejecutar el script principal: python src/ingestion.py
-- ** Para ejecutar el script de limpieza python src/cleaning.py
+- ** Para ejecutar el script de limpieza: python src/cleaning.py
+- ** Para ejecutar el script de enriquecimiento: python src/enrichement.py
 
 ### 4. Librerias utilizadas
 - ** Librerías utilizadas
